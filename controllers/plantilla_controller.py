@@ -14,13 +14,14 @@ class CrearPlantilla:
 
     def GET(self):
         datos = web.input()
+        plantillas = Plantilla.getAll()
+        print plantillas
         if 'plantilla_base' in datos.keys():
             preguntas = Plantilla.getById(datos['plantilla_base']).preguntas
-            plantillas = Plantilla.getAll()
             return render.crear_plantilla(preguntas, plantillas)
         else:
             datos = None
-            return render.crear_plantilla(datos)
+            return render.crear_plantilla(datos, plantillas)
 
     def POST(self):
         #import ipdb; ipdb.set_trace()

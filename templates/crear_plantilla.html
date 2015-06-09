@@ -6,13 +6,16 @@ $def with (preguntas, plantillas)
 </script>
 
 Crear plantilla desde existente <br>
-  <select name="plantilla_id" > 
+ <form action="/plantilla/crear/" method="get">   
+    <select name="plantilla_base" > 
 $if plantillas:
   $for p in plantillas:
     <option value="$p.id">$p.nombre</option>
-  </select> <br>
+  </select>  <input type="submit" value="Usar plantilla">
+ </form>
 
-<button id="addQuestionButton" class="btn btn-default"> Añadir pregunta </button>
+
+
 <form method="post" action="/plantilla/crear/" role="form" id="">
 	
   	Nombre: <input type="text"  name="nombre"> <br>
@@ -23,8 +26,8 @@ $if plantillas:
   		<input type="text" name="preguntas"> 
   	$else:
   		$for p in preguntas:
-  			<input type="text" name="preguntas" value="$p.pregunta">  
+  			<input type="text" name="preguntas" value="$p.pregunta">  <br>
  	</div>
- 	<button type="submit" class="btn btn-default">Crear</button> <br>
+ 	<button type="submit" class="btn btn-default">Crear Plantilla</button> <br>
 </form>
-
+<button id="addQuestionButton" class="btn btn-default"> Añadir pregunta </button>
