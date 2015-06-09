@@ -16,7 +16,8 @@ class CrearPlantilla:
         datos = web.input()
         if 'plantilla_base' in datos.keys():
             preguntas = Plantilla.getById(datos['plantilla_base']).preguntas
-            return render.crear_plantilla(preguntas)
+            plantillas = Plantilla.getAll()
+            return render.crear_plantilla(preguntas, plantillas)
         else:
             datos = None
             return render.crear_plantilla(datos)

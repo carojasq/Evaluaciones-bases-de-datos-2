@@ -1,9 +1,16 @@
-$def with (preguntas)
+$def with (preguntas, plantillas)
 <h1> Crear plantilla </h1>
 
 <script>
 
 </script>
+
+Crear plantilla desde existente <br>
+  <select name="plantilla_id" > 
+$if plantillas:
+  $for p in plantillas:
+    <option value="$p.id">$p.nombre</option>
+  </select> <br>
 
 <button id="addQuestionButton" class="btn btn-default"> Añadir pregunta </button>
 <form method="post" action="/plantilla/crear/" role="form" id="">

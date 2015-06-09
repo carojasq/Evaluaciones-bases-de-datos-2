@@ -305,10 +305,6 @@ CREATE TABLE evaluacion_usuario
 ;
 
 
-ALTER TABLE evaluacion_usuario ADD CONSTRAINT PK_evaluados 
-	PRIMARY KEY (evaluado_id, evaluacion_id)
-;
-
 ALTER TABLE evaluacion_usuario ADD CONSTRAINT FK_evaluacion_usuario_usuarios 
 	FOREIGN KEY (evaluador_id) REFERENCES usuarios (id)
 ;
