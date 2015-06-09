@@ -41,12 +41,14 @@ es3 = Estructura.create(u3, coordinador_ing_sistemas, es2)
 
 #Creo un estudiante
 u10 =  Usuario.create("Fabian Puentes", "fpuentes", "contrasena", "fpuentes@u.co")
-e10 = Estudiante.create(u10, "54535453", es3)
+e10 = Estudiante.create(u10, "3454554", es3)
 
 #Otro estuduante
 u15 =  Usuario.create("Viviana Sotelo", "vsotelo", "contrasena", "vsotelo@u.co")
-e15 = Estudiante.create(u15, "54535453", es3)
-
+e15 = Estudiante.create(u15, "98765432", es3)
+#Otro
+u16 =  Usuario.create("Andres Cobos", "acobos", "contrasena", "acobos@u.co")
+e16 = Estudiante.create(u16, "54532453", es3)
 
 #Creo un funcionario y le doy cargo
 u11 = Usuario.create("Sonia Ordonez", "soniaordo", "contrasena", "soniaordo@u.co")
@@ -72,3 +74,4 @@ g1.addEstudiante(e15)
 
 #Creo una evaluacion
 eva1 = Evaluacion.create("20151", "2015/08/05", "2015/01/01", 100, pl )
+eva1.asignarEvaluaciones("Estudiante", "Docente")
