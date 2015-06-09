@@ -1,6 +1,6 @@
 $def with (plantillas)
 
-
+<h2> <a href="/plantilla/crear/"> Nueva plantilla </a> </h2>
 <table class="table">
   <tr>
     <th> Nombre de plantilla </th>
@@ -10,7 +10,7 @@ $def with (plantillas)
 
     $for plantilla in plantillas:
        <tr>
-           <td>$plantilla.nombre</td>
+         <td> <a href="/plantilla/ver/?id=$plantilla.id" > $plantilla.nombre</a></td>
            <td>$plantilla.id</td>
            <td>$plantilla.modificable</td>
        </tr>

@@ -1,10 +1,12 @@
 from config import Config
 from datetime import date
+from models import Plantilla
 
 #Este modelo es de otro proyecto, hay que adaptarlo para las necesidades
 class Evaluacion:
 
     tabla = "evaluaciones"
+    tabla_usuarios = "evaluacion_usuario"
 
     def __init__(self, identificador, periodo, fecha_inicial, fecha_final, tiempo_maximo, plantilla_id):
         self.id = identificador
@@ -13,11 +15,12 @@ class Evaluacion:
         self.fecha_final = fecha_final
         self.tiempo_maximo = tiempo_maximo
         self.plantilla_id = plantilla_id
+        self.plantilla = Plantilla.getById(plantilla_id)
 
     #insertar
     @staticmethod
-    def create(periodo, fecha_final, fecha_inicial, tiempo_maximo, plantilla_id):
-        query = " INSERT INTO %s (id, periodo, fecha_final, fecha_inicial, tiempo_maximo, plantilla_id) VALUES (sequence_evaluaciones.nextval,'%s',to_date('%s','yyyy/mm/dd'),to_date('%s','yyyy/mm/dd'),'%s','%s')" % (Evaluacion.tabla, periodo, fecha_final, fecha_inicial, tiempo_maximo, plantilla_id)
+    def create(periodo, fecha_final, fecha_inicial, tiempo_maximo, plantilla):
+        query = " INSERT INTO %s (id, periodo, fecha_final, fecha_inicial, tiempo_maximo, plantilla_id) VALUES (sequence_evaluaciones.nextval,'%s',to_date('%s','yyyy/mm/dd'),to_date('%s','yyyy/mm/dd'),'%s','%s')" % (Evaluacion.tabla, periodo, fecha_final, fecha_inicial, tiempo_maximo, plantilla.id)
         cursor = Config.getCursor()
         try:
             cursor.execute(query)
@@ -26,7 +29,7 @@ class Evaluacion:
             print e
             print "No es posible guardar objeto"
         id = cursor.fetchone()
-        return Evaluacion(id[0],periodo, fecha_inicial, fecha_final, tiempo_maximo, plantilla_id)
+        return Evaluacion(id[0],periodo, fecha_inicial, fecha_final, tiempo_maximo, plantilla.id)
     
     #consultar
     @staticmethod
@@ -44,35 +47,7 @@ class Evaluacion:
             return None         
         return Evaluacion(row[0], row[1], row[3], row[2], row[4], row[5])
 
-
-    @staticmethod
-    def getPlantilla(self):
-        query = "SELECT pr.id, pr.pregunta FROM %s tr, %s pr WHERE tr.plantilla_id=%s" % (Plantilla.tabla_preguntas_plantillas, Pregunta.tabla, self.id)
-        cursor = Config.getCursor()
-        preguntas = []
-        try:
-            cursor.execute(query)
-            rows = cursor.fetchall()
-            for row in rows:
-                preguntas.append(Pregunta(row[0], row[1]))
-            return preguntas
-        except Exception, e:
-            print query
-            print e
-            return []
-    '''@staticmethod
-    def isValidUser(username, contrasena):
-        query =  "SELECT id FROM %s WHERE username='%s' AND contrasena='%s'" % (Usuario.tabla, username, contrasena)
-        cursor =  Config.getCursor()
-        try:
-            cursor.execute(query)
-        except Exception, e:
-            print e
-            print "No es posible guardar objeto"
-        id = cursor.fetchone()
-        if id is None:
-            return None
-        else:
-            return id[0]'''
-
+    @sta
+   def getAvailableForUser(usuario):
+        query = "SELECT evaluacion_id FROM "
 

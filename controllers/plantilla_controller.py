@@ -39,7 +39,6 @@ class VerPlantilla:
 
     def GET(self):
         datos = web.input()
-        import ipdb; ipdb.set_trace()
         id_plantilla = datos['id']
         plantilla = Plantilla.getById(id_plantilla)        
         return render.ver_plantilla(plantilla)

@@ -51,7 +51,8 @@ class Login:
             if id is not None:
                 usuario = Usuario.getById(id)
                 web.ctx.session.login = 1
-                web.ctx.session.privilege = usuario.id
+                import ipdb; ipdb.set_trace()
+                web.ctx.session.privilege = Usuario.getTipo(usuario.id)
                 print web.ctx.session.privilege
                 web.seeother('/')# Cambiar por menu inicial
             else:

@@ -3,8 +3,6 @@ web.config.debug = False
 from controllers.plantilla_controller import *
 from controllers.usuario_controller import *
 from controllers.index_controller import *
-from controllers.order_controller import *
-from controllers.admin_controller import *
 from controllers.evaluacion_controller import *
 from controllers.login import *
 from controllers.reset import *
@@ -20,6 +18,7 @@ urls = (
     '/plantilla/listar/.*', 'ListarPlantilla',
     '/plantilla/ver/.*', 'VerPlantilla',
     '/evaluacion/crear/.*', 'CrearEvaluacion',
+    '/evaluacion/listar/.*', 'ListarEvaluacion',
 )
 
 render = web.template.render('templates/', base="base")
@@ -34,6 +33,7 @@ def session_hook():
 
 app.add_processor(web.loadhook(session_hook))
 app.run()
+
 
 
 
