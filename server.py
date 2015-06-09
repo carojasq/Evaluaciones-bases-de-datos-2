@@ -5,6 +5,7 @@ from controllers.usuario_controller import *
 from controllers.index_controller import *
 from controllers.order_controller import *
 from controllers.admin_controller import *
+from controllers.evaluacion_controller import *
 from controllers.login import *
 from controllers.reset import *
 
@@ -18,6 +19,7 @@ urls = (
     '/plantilla/crear/.*', 'CrearPlantilla',
     '/plantilla/listar/.*', 'ListarPlantilla',
     '/plantilla/ver/.*', 'VerPlantilla',
+    '/evaluacion/crear/.*', 'CrearEvaluacion',
 )
 
 render = web.template.render('templates/', base="base")

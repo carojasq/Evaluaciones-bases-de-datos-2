@@ -45,14 +45,14 @@ class Plantilla:
             return False
 
     def getPreguntas(self):
-        query = "SELECT pr.id, pr.pregunta FROM %s tr, %s pr WHERE tr.plantilla_id=%s" % (Plantilla.tabla_preguntas_plantillas, Pregunta.tabla, self.id)
+        query = "SELECT tr.pregunta_id FROM %s tr WHERE tr.plantilla_id=%s" % (Plantilla.tabla_preguntas_plantillas, self.id)
         cursor = Config.getCursor()
         preguntas = []
         try:
             cursor.execute(query)
             rows = cursor.fetchall()
             for row in rows:
-                preguntas.append(Pregunta(row[0], row[1]))
+                preguntas.append(Pregunta.getById(row[0]))
             return preguntas
         except Exception, e:
             print query

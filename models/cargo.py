@@ -53,3 +53,15 @@ class Cargo:
         for row in rows:
             cargos.append(Cargo(row[0], row[1]))
         return cargos
+
+    @staticmethod
+    def getByName(nombre):
+        cursor = Config.getCursor()
+        query = "SELECT * FROM %s WHERE nombre='%s'" % (Cargo.tabla, nombre.strip())
+        try:
+            cursor.execute(query)
+            row = cursor.fetchone()  
+        except:
+            print "No es posible ejecutar query  o no hay resultados validos"
+            return None
+        return Cargo(row[0], row[1])

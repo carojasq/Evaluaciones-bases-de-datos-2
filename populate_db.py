@@ -3,6 +3,7 @@ from models.cargo import Cargo
 from models.plantilla import Plantilla
 from models.usuario import Usuario, Administrador, Estudiante, Estructura, Funcionario
 from models.tesis import Tesis
+from models.grupo import Grupo
 
 #Creo 2 asignaturas
 a1 = Asignatura.create("Bases de datos 2")
@@ -16,11 +17,13 @@ coordinador_ing_sistemas = Cargo.create("Coordinador ingenieria de sistemas")
 
 #Creo una plantilla y anado una pregunta
 pl = Plantilla.create("Plantilla de prueba")
-pl.addPregunta("Nueva pregunta")
+pl.addPregunta("El profesor sabe?")
+pl.addPregunta("El profesor va a clase?")
+pl.addPregunta("El profesor es claro?")
 
 #Creo usuario administrador
 u1 = Usuario.create("Cristian Rojas", "carojasq", "contrasena", "carojasq@u.co")
-a1 = Administrador.create(u1)
+admin1 = Administrador.create(u1)
 
 #Creo una estructura (rectoria)
 u1 = Usuario.create("Rectoria",  "rectoria", "contrasena", "recotoria@u.co")
@@ -39,6 +42,11 @@ es3 = Estructura.create(u3, coordinador_ing_sistemas, es2)
 u10 =  Usuario.create("Fabian Puentes", "fpuentes", "contrasena", "fpuentes@u.co")
 e10 = Estudiante.create(u10, "54535453", es3)
 
+#Otro estuduante
+u15 =  Usuario.create("Viviana Sotelo", "vsotelo", "contrasena", "vsotelo@u.co")
+e15 = Estudiante.create(u15, "54535453", es3)
+
+
 #Creo un funcionario y le doy cargo
 u11 = Usuario.create("Sonia Ordonez", "soniaordo", "contrasena", "soniaordo@u.co")
 f11 = Funcionario.create(u11, "8789798")
@@ -53,6 +61,10 @@ e10.setTesis(t1)
 #Ejemplo para obtener el tipo de un usuario
 tipo = u11.getTipo(u11.id)
 
-
-
+# Creo dos grupos de bases de datos 1 y 2
+g1 =  Grupo.create(a1, f11, 20151, es3)
+g2 =  Grupo.create(a2, f11, 20151, es3)
+g1.addEstudiante(e10)
+g2.addEstudiante(e10)
+g1.addEstudiante(e15)
 

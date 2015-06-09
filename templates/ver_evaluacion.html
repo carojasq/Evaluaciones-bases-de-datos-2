@@ -1,0 +1,70 @@
+$def with (evaluacion,preguntas)
+
+<h1> Encabezado </h1>
+<table class="table">
+  <tr>
+    <th> Periodo </th>
+  </tr>
+  <tr>
+    <td>$evaluacion.periodo</td>
+  </tr>
+</table>
+<table class="table">
+  <tr>
+    <th> Fecha inicial </th>
+    <th> Fecha final </th>
+  </tr>
+  <tr>
+    <td>$evaluacion.fecha_inicial</td>
+    <td>$evaluacion.fecha_final</td>
+  </tr>
+</table>
+<table class="table">
+  <tr>
+    <th> Tiempo maximo de inactividad</th>
+  </tr>
+  <tr>
+    <td>$evaluacion.tiempo_maximo</td>
+  </tr>
+</table>
+
+<h1> Detalle </h1>
+<table class="table">
+  <tr>
+    <th> Pregunta </th>
+    <th> Respuesta </th>
+  </tr>
+  $for pregunta in preguntas:
+       <tr>
+           <td>$pregunta.pregunta</td>
+           <td>
+            <table>
+              <tr>
+                <th> <label class="radio"> 1 </label> </th>
+                <th> <label class="radio"> 2 </label> </th>                
+                <th> <label class="radio"> 3 </label> </th>                
+                <th> <label class="radio"> 4 </label> </th>
+                <th> <label class="radio"> 5 </label> </th>
+              </tr>
+              <tr>
+                <td>
+                  <input type="radio" name="radioId" value="option1">
+                </td>
+                <td>
+                  <input type="radio" name="radioId" value="option2">                
+                </td>
+                <td>
+                  <input type="radio" name="radioId" value="option3">                
+                </td>
+                <td>
+                  <input type="radio" name="radioId" value="option4">                
+                </td>
+                <td>
+                  <input type="radio" name="radioId" value="option5">                
+                </td>
+              </tr>
+            </table>              
+            </td>
+       </tr>
+</table>
+<button type="submit" class="btn btn-default">Enviar</button>

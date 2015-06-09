@@ -1,6 +1,6 @@
 from config import Config
 from datetime import date
-
+from models.cargo import Cargo
 #Este modelo es de otro proyecto, hay que adaptarlo para las necesidades
 class Usuario:
 
@@ -98,7 +98,7 @@ class Usuario:
 
     @staticmethod
     def isValidUser(username, contrasena):
-        query =  "SELECT id FROM %s WHERE username='%s' AND contrasena='%s'" % (Usuario.tabla, username, contrasena)
+        query =  "SELECT id FROM %s WHERE username='%s' AND contrasena='%s' AND HABILITADO='Y'" % (Usuario.tabla, username, contrasena)
         cursor =  Config.getCursor()
         try:
             cursor.execute(query)
@@ -117,8 +117,10 @@ class  Funcionario:
     tabla_cargos = "cargos_historicos"
 
     def __init__(self, usuario, codigo):
+        self.nombre = usuario.nombre
         self.usuario = usuario
         self.codigo = codigo
+
         self.cargo = self.getCargo()
         self.id = usuario.id
     
@@ -145,6 +147,26 @@ class  Funcionario:
             print e
             print "No es posible guardar objeto"
             return False
+
+    @staticmethod
+    def getAll():
+        query = "SELECT * FROM %s" % (Funcionario.tabla)
+        cursor = Config.getCursor()
+        funcionarios = []
+        try:
+            cursor.execute(query)
+            rows = cursor.fetchall()
+        except Exception, e:
+            print e
+        for row in rows:
+            try:
+                u = Usuario.getById(row[0])
+                funcionarios.append(Funcionario(u, row[0]))
+            except:
+                print "Error trayendo usuario"
+
+        return funcionarios
+
 
     def getCargo(self):
         return None
@@ -187,8 +209,35 @@ class Estudiante:
 
     @staticmethod
     def getById(id):
-        query = ""
-        return None
+        query = "SELECT * FROM %s WHERE id=%s" % (Estudiante.tabla, id)
+        cursor = Config.getCursor()
+        try:
+            cursor.execute(query)
+            row = cursor.fetchone()
+        except Exception, e:
+            print e
+            return None
+        u = Usuario.getById(row[0])
+        e = Estructura.getById(row[2])
+        est = Estudiante(u, row[1], e)
+        return est
+
+    @staticmethod
+    def getAll():
+        query =  "SELECT * FROM %s" % (Estudiante.tabla)
+        cursor = Config.getCursor()
+        estudiantes = []
+        try:
+            cursor.execute(query)
+            rows = cursor.fetchall()
+        except Exception, e:
+            print e
+            return []
+        for row in rows:
+            u = Usuario.getById(row[0])
+            e = Estructura.getById(row[2])
+            estudiantes.append(Estudiante(u, row[1], e))
+        return estudiantes
 
 
 class Administrador:
@@ -234,7 +283,31 @@ class  Estructura:
             print "No es posible guardar objeto"
         return Estructura(usuario, cargo_director, estructura_padre)
 
+    @staticmethod
+    def getById(id):
+        return None
 
     def setCargoDirector(self, cargo):
         return True
+
+    @staticmethod
+    def getAll():
+        query =  "select * from estructuras"
+        cursor = Config.getCursor()
+        estructuras = []
+        try:
+            cursor.execute(query)
+            rows = cursor.fetchall()
+        except:
+            print "Error en el cursor"
+            return estructuras
+        for row in rows:
+            u =  Usuario.getById(row[0])
+            c =  Cargo.getById(row[2])
+            estructuras.append(Estructura(u, c))
+        return estructuras
+
+
+
+
     

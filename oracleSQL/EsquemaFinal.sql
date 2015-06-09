@@ -161,6 +161,11 @@ ALTER TABLE grupos ADD CONSTRAINT FK_grupos_funcionarios
 	FOREIGN KEY (docente_id) REFERENCES funcionarios (id)
 ;
 
+
+ALTER TABLE grupos ADD CONSTRAINT FK_grupos_estructur 
+	FOREIGN KEY (id) REFERENCES estructuras (id)
+;
+
 DROP TABLE cargos_historicos CASCADE CONSTRAINTS
 ;
 CREATE TABLE cargos_historicos
@@ -360,6 +365,7 @@ DROP SEQUENCE sequence_grupos;
 DROP SEQUENCE sequence_tesis ;
 DROP SEQUENCE sequence_resultados ;
 DROP SEQUENCE sequence_evaluaciones  ;
+DROP SEQUENCE sequence_asignaturas  ;
 
 CREATE SEQUENCE sequence_cargos  START WITH 1  INCREMENT BY   1;
 CREATE SEQUENCE sequence_usuarios  START WITH 1  INCREMENT BY   1;

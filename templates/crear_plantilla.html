@@ -1,0 +1,23 @@
+$def with (preguntas)
+<h1> Crear plantilla </h1>
+
+<script>
+
+</script>
+
+<button id="addQuestionButton" class="btn btn-default"> Añadir pregunta </button>
+<form method="post" action="/plantilla/crear/" role="form" id="">
+	
+  	Nombre: <input type="text"  name="nombre"> <br>
+  	Preguntas:
+  	
+  	<div id="preguntas"> 
+  	$if preguntas is None:
+  		<input type="text" name="preguntas"> 
+  	$else:
+  		$for p in preguntas:
+  			<input type="text" name="preguntas" value="$p.pregunta">  
+ 	</div>
+ 	<button type="submit" class="btn btn-default">Crear</button> <br>
+</form>
+

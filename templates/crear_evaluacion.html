@@ -1,0 +1,47 @@
+$def with (plantillas)
+
+<script type="text/javascript">
+    function showContent() {
+        element = document.getElementById("content");
+        check = document.getElementById("check");
+        if (check.checked) ín
+            element.style.display='block';
+        }
+        else {
+            element.style.display='none';
+        }
+    }
+</script>
+
+<h1> Crear evaluacion </h1>
+
+<form method="post" action="/evaluacion/crear/" role="form">
+  Periodo: <input type="text"  name="periodo"> <br>
+  Fecha inicial: <input type="text" placeholder="AAAA/MM/DD" name="fecha_inicial"> <br>
+  Fecha final: <input type="text" placeholder="AAAA/MM/DD" name="fecha_final"> <br>
+  Tiempo máximo: <input type="text" name="tiempo_maximo"> <br>
+  Elija la plantilla a aplicar:
+  <select name="plantilla_id" > 
+  $for p in plantillas:
+    <option value="$p.id">$p.nombre</option>
+  </select> <br>
+  Evaluador
+  <select name="evaluador" > 
+    <option value="funcionarios">Funcionario</option>
+    <option value="docentes">Docentes</option>
+    <option value="estudiantes">Estudiantes</option>
+    <option value="estructuras">Estructuras</option>
+  </select> <br>
+  Evaluado:
+   <select name="evaluado" >
+    <option value="funcionarios">Funcionario</option>
+    <option value="docentes">Docentes</option>
+    <option value="estudiantes">Estudiantes</option>
+    <option value="estructuras">Estructuras</option>
+  </select> <br>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
+
+
+
+
