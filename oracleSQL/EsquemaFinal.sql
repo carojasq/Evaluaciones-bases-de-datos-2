@@ -372,3 +372,31 @@ CREATE SEQUENCE sequence_tesis  START WITH 1  INCREMENT BY   1;
 CREATE SEQUENCE sequence_resultados  START WITH 1  INCREMENT BY   1;
 CREATE SEQUENCE sequence_evaluaciones  START WITH 1  INCREMENT BY   1;
 CREATE SEQUENCE sequence_asignaturas  START WITH 1  INCREMENT BY   1;
+
+
+create or replace procedure prep_examenes_est_prof(eva_id evaluaciones.id%type) as
+	v_estu_id usuarios.id%type;
+	v_profe_id usuarios.id%type;
+	v_grupo grupos%rowtype;
+	v_periodo evaluaciones.periodo%type;
+	cursor grupo_cursor(perio evaluaciones.periodo%type) is select gr.id, gr.asignatura_id, gr.docente_id, gr.periodo from grupos gr, funcionarios d where d.id=gr.docente_id and gr.periodo=perio;
+	cursor estud_cursor(gr_id grupos.id%type) is select e.id from estudiantes e, estudiantes_grupos eg, grupos g where e.id=eg.estudiante_id and g.id=eg.grupo_id and g.id=gr_id;	
+begin
+	select periodo into v_periodo from evaluaciones where id=eva_id;
+	open grupo_cursor(v_periodo);
+		loop
+			fetch grupo_cursor into v_grupo;
+			exit when grupo_cursor%notfound;
+			v_profe_id:=v_grupo.docente_id;
+			open estud_cursor(v_grupo.id);
+				loop					
+					fetch estud_cursor into v_estu_id;
+					exit when estud_cursor%notfound;
+					insert into evaluacion_usuario (evaluado_id,evaluacion_id,evaluador_id) values(v_profe_id,eva_id,v_estu_id);
+				end loop;
+			close estud_cursor;			
+		end loop;
+	close grupo_cursor;
+	commit work;
+end;
+

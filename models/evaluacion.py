@@ -1,6 +1,6 @@
 from config import Config
 from datetime import date
-from models import Plantilla
+from models.plantilla import Plantilla
 
 #Este modelo es de otro proyecto, hay que adaptarlo para las necesidades
 class Evaluacion:
@@ -47,7 +47,7 @@ class Evaluacion:
             return None         
         return Evaluacion(row[0], row[1], row[3], row[2], row[4], row[5])
 
-    @sta
-   def getAvailableForUser(usuario):
+    @staticmethod
+    def getAvailableForUser(usuario):
         query = "SELECT evaluacion_id FROM "
 

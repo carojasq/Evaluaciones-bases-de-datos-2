@@ -4,6 +4,7 @@ from models.plantilla import Plantilla
 from models.usuario import Usuario, Administrador, Estudiante, Estructura, Funcionario
 from models.tesis import Tesis
 from models.grupo import Grupo
+from models.evaluacion import Evaluacion
 
 #Creo 2 asignaturas
 a1 = Asignatura.create("Bases de datos 2")
@@ -68,3 +69,6 @@ g1.addEstudiante(e10)
 g2.addEstudiante(e10)
 g1.addEstudiante(e15)
 
+
+#Creo una evaluacion
+eva1 = Evaluacion.create("20151", "2015/08/05", "2015/01/01", 100, pl)
