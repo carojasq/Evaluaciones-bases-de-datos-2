@@ -38,7 +38,16 @@ class Evaluacion:
             cursor.callproc("prep_examenes_est_prof", [self.id])
             return True;
         elif evaluado =="Estudiante"  and evaluador=="Estudiante":
-            # Llama procedure
+            cursor.callproc("prep_examenes_est_est", [self.id])
+            return True
+        elif evaluado =="Funcionario"  and evaluador=="Estudiante":
+            cursor.callproc("prep_examenes_est_funcionario", [self.id])
+            return True
+        elif evaluado =="Estructura"  and evaluador=="Estudiante":
+            cursor.callproc("prep_examenes_est_estruc", [self.id])
+            return True
+        elif evaluado =="Director/Jurado - Tesis"  and evaluador=="Estudiante":
+            cursor.callproc("prep_examenes_est_direc", [self.id])
             return True
         return False
 

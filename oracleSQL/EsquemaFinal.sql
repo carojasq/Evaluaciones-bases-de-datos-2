@@ -373,7 +373,6 @@ CREATE SEQUENCE sequence_resultados  START WITH 1  INCREMENT BY   1;
 CREATE SEQUENCE sequence_evaluaciones  START WITH 1  INCREMENT BY   1;
 CREATE SEQUENCE sequence_asignaturas  START WITH 1  INCREMENT BY   1;
 
-
 create or replace procedure prep_examenes_est_prof(eva_id evaluaciones.id%type) as
 	v_estu_id usuarios.id%type;
 	v_profe_id usuarios.id%type;
@@ -451,3 +450,73 @@ begin
 end;
 /
 
+create or replace procedure prep_examenes_est_direc(eva_id evaluaciones.id%type) as
+	v_estu estudiantes%rowtype;
+	v_evaluador_id usuarios.id%type;
+	v_evaluado_id usuarios.id%type;	
+	v_evaluado2_id usuarios.id%type;
+	cursor estud_cursor is select e.id, e.codigo, e.estructura_id, e.tesis_id from estudiantes e, tesis t, usuarios u where e.tesis_id=t.id and e.id=u.id and upper(u.habilitado) = 'Y';
+	cursor direc_cursor(tesis tesis.id%type) is select t.director_id from tesis t where t.id = tesis;
+	cursor jurado_cursor(tesis tesis.id%type) is select t.jurado_id from tesis t where t.id = tesis;
+begin
+	open estud_cursor;
+		loop
+			fetch estud_cursor into v_estu;
+			exit when estud_cursor%notfound;			
+			v_evaluador_id:=v_estu.id;
+			select t.director_id into v_evaluado_id from tesis t where t.id = v_estu.tesis_id;
+			if v_evaluado_id is not null then
+				insert into evaluacion_usuario (evaluado_id,evaluacion_id,evaluador_id) values(v_evaluado_id,eva_id,v_evaluador_id);
+			end if;
+			select t.jurado_id into v_evaluado2_id from tesis t where t.id = v_estu.tesis_id;
+			if v_evaluado2_id is not null then
+				insert into evaluacion_usuario (evaluado_id,evaluacion_id,evaluador_id) values(v_evaluado2_id,eva_id,v_evaluador_id);
+			end if;
+		end loop;
+	close estud_cursor;
+	commit work;
+end;
+/
+
+create or replace procedure prep_examenes_est_funcionario(eva_id evaluaciones.id%type) as
+	v_estu estudiantes%rowtype;
+	v_evaluador_id usuarios.id%type;
+	v_evaluado_id usuarios.id%type;
+	v_fun_evaluado_id usuarios.id%type;
+	cursor estud_cursor is select e.id, e.codigo, e.estructura_id, e.tesis_id from estudiantes e, usuarios u where e.id=u.id and upper(u.habilitado) = 'Y';	
+	cursor depen_estruc_cursor(estr estructuras.id%type) is select dep.id from estructuras e, estructuras dep, cargos c where e.dependencia_id=dep.id and e.director_id=c.id and upper(c.nombre) != 'DOCENTE' and e.id=estr;
+	cursor fun_estruc_cursor(estr estructuras.id%type) is select ch.funcionario_id from estructuras e, estructuras dep, cargos c, cargos_historicos ch where e.dependencia_id=dep.id and e.director_id=c.id and c.id=ch.cargo_id and e.id=estr;
+begin
+	open estud_cursor;
+		loop
+			fetch estud_cursor into v_estu;
+			exit when estud_cursor%notfound;			
+			v_evaluador_id:=v_estu.id;			
+			v_evaluado_id:=v_estu.estructura_id;
+			open fun_estruc_cursor(v_estu.estructura_id);
+				fetch fun_estruc_cursor into v_fun_evaluado_id;
+				if fun_estruc_cursor%found then
+					insert into evaluacion_usuario (evaluado_id,evaluacion_id,evaluador_id) values(v_fun_evaluado_id,eva_id,v_evaluador_id);
+				end if;			
+			close fun_estruc_cursor;
+			while (v_evaluado_id is not null)  
+			loop
+				open depen_estruc_cursor(v_evaluado_id);
+					fetch depen_estruc_cursor into v_evaluado_id;
+					if depen_estruc_cursor%found then
+						open fun_estruc_cursor(v_evaluado_id);
+							fetch fun_estruc_cursor into v_fun_evaluado_id;
+							if fun_estruc_cursor%found then
+								insert into evaluacion_usuario (evaluado_id,evaluacion_id,evaluador_id) values(v_fun_evaluado_id,eva_id,v_evaluador_id);
+							end if;			
+						close fun_estruc_cursor;
+					else
+						v_evaluado_id:=null;
+					end if;
+				close depen_estruc_cursor;		
+			end loop;
+		end loop;
+	close estud_cursor;
+	commit work;
+end;
+/
