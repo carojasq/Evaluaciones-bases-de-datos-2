@@ -82,6 +82,8 @@ pl1.addPregunta("La estructura resuelve dudas rápido?")
 pl1.addPregunta("La estructura responde pronto cartas y peticiones?")
 pl1.addPregunta("La estructura atiende en el horario adecuado? ")
 
+
+#
 pl2 = Plantilla.create("Plantilla para evaluar gestion de tesis")
 pl2.addPregunta("El docente revisa rápido? ")
 pl2.addPregunta("El docente da buenas recomendaciones?")
