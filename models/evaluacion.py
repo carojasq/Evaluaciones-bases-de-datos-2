@@ -34,11 +34,12 @@ class Evaluacion:
 
     def asignarEvaluaciones(self, evaluador, evaluado):
         cursor = Config.getCursor()
-        query = "execute prep_examenes_est_prof(%s)" % self.id
         if evaluado=="Docente" and evaluador=="Estudiante":
-            print query
-            cursor.callproc(prep_examenes_est_prof)
+            cursor.callproc("prep_examenes_est_prof", [self.id])
             return True;
+        elif evaluado =="Estudiante"  and evaluador=="Estudiante":
+            # Llama procedure
+            return True
         return False
 
     

@@ -75,3 +75,18 @@ g1.addEstudiante(e15)
 #Creo una evaluacion
 eva1 = Evaluacion.create("20151", "2015/08/05", "2015/01/01", 100, pl )
 eva1.asignarEvaluaciones("Estudiante", "Docente")
+
+#Estructuras
+pl1 = Plantilla.create("Plantilla para evaluar estructuras")
+pl1.addPregunta("La estructura resuelve dudas rápido?")
+pl1.addPregunta("La estructura responde pronto cartas y peticiones?")
+pl1.addPregunta("La estructura atiende en el horario adecuado? ")
+
+pl2 = Plantilla.create("Plantilla para evaluar gestion de tesis")
+pl2.addPregunta("El docente revisa rápido? ")
+pl2.addPregunta("El docente da buenas recomendaciones?")
+
+pl3 = Plantilla.create("Plantilla de autoevaluacion estudiante")
+pl3.addPregunta("Si fue juicioso?")
+pl3.addPregunta("Si fue a clase?")
+pl3.addPregunta("Si hico los trabajos?")
