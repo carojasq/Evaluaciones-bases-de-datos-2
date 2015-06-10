@@ -12,8 +12,8 @@ class Evaluacion:
     def __init__(self, identificador, periodo, fecha_inicial, fecha_final, tiempo_maximo, plantilla_id):
         self.id = identificador
         self.periodo = periodo
-        self.fecha_inicial = fecha_inicial.date()
-        self.fecha_final = fecha_final.date()
+        self.fecha_inicial = fecha_inicial
+        self.fecha_final = fecha_final
         self.tiempo_maximo = tiempo_maximo
         self.plantilla_id = plantilla_id
         self.plantilla = Plantilla.getById(plantilla_id)

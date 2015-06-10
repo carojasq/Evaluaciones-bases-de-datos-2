@@ -55,6 +55,11 @@ u11 = Usuario.create("Sonia Ordonez", "soniaordo", "contrasena", "soniaordo@u.co
 f11 = Funcionario.create(u11, "8789798")
 f11.setCargo(docente_c)
 
+#Creo un funcionario y le doy cargo
+u111 = Usuario.create("Alba Nieto", "alban", "contrasena", "alban@u.co")
+f111 = Funcionario.create(u111, "8590285")
+f111.setCargo(docente_c)
+
 #Creo una tesis
 t1 = Tesis.create("Este es el titulo")
 
@@ -66,7 +71,7 @@ tipo = u11.getTipo(u11.id)
 
 # Creo dos grupos de bases de datos 1 y 2
 g1 =  Grupo.create(a1, f11, 20151, es3)
-g2 =  Grupo.create(a2, f11, 20151, es3)
+g2 =  Grupo.create(a2, f111, 20151, es3)
 g1.addEstudiante(e10)
 g2.addEstudiante(e10)
 g1.addEstudiante(e15)
@@ -78,17 +83,27 @@ eva1.asignarEvaluaciones("Estudiante", "Docente")
 
 #Estructuras
 pl1 = Plantilla.create("Plantilla para evaluar estructuras")
-pl1.addPregunta("La estructura resuelve dudas rápido?")
+pl1.addPregunta("La estructura resuelve dudas rapido?")
 pl1.addPregunta("La estructura responde pronto cartas y peticiones?")
 pl1.addPregunta("La estructura atiende en el horario adecuado? ")
 
-
-#
+#Tesis
 pl2 = Plantilla.create("Plantilla para evaluar gestion de tesis")
-pl2.addPregunta("El docente revisa rápido? ")
+pl2.addPregunta("El docente revisa rapido? ")
 pl2.addPregunta("El docente da buenas recomendaciones?")
 
+#Autoevaluacion
 pl3 = Plantilla.create("Plantilla de autoevaluacion estudiante")
 pl3.addPregunta("Si fue juicioso?")
 pl3.addPregunta("Si fue a clase?")
-pl3.addPregunta("Si hico los trabajos?")
+pl3.addPregunta("Si hizo los trabajos?")
+
+#Pongo directores a la tesis
+t1.setJurado(f111)
+t1.setDirector(f11)
+
+#Nueva tesis
+t2 = Tesis.create("Esta es otra tesis")
+e15.setTesis(t1)
+t2.setJurado(f11)
+t2.setDirector(f111)

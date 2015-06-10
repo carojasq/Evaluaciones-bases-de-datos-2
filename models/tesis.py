@@ -5,11 +5,11 @@ class Tesis:
 
     tabla = "tesis"
 
-    def __init__(self, id, nombre, jurado=None, director=None):
+    def __init__(self, id, nombre, jurado_id=0, director_id=0):
         self.id = id
         self.nombre = nombre
-        self.jurado = self.getJurado()
-        self.director = self.getDirector()
+        self.jurado = Usuario.getById(jurado_id)
+        self.director = Usuario.getById(director_id)
 
     @staticmethod
     def create(nombre):
@@ -25,10 +25,25 @@ class Tesis:
         return Tesis(id[0],nombre)
 
     def setDirector(self, director):
-        return True
+        query = "UPDATE %s SET director_id=%s WHERE id=%s" % (Tesis.tabla, str(director.id), str(self.id))
+        cursor = Config.getCursor()
+        try:
+            cursor.execute(query)
+            return True
+        except Exception, e:
+            print e
+            return False
 
     def setJurado(self, jurado):
-        return True
+        query = "UPDATE %s SET jurado_id=%s WHERE id=%s" % (Tesis.tabla, str(jurado.id), str(self.id))
+        cursor = Config.getCursor()
+        try:
+            cursor.execute(query)
+            return True
+        except Exception, e:
+            print e
+            return False
+            
 
     def getJurado(self):
         return None
@@ -38,4 +53,12 @@ class Tesis:
 
     @staticmethod
     def getById(id):
-        return True
+        query =  "SELECT * FROM %s WHERE id=%s" (Tesis.tabla, id)
+        cursor = Config.getCursor()
+        try:
+            cursor.execute(query)
+            row = cursor.fetchone()
+        except Exception, e:
+            print e
+            return None
+        return Tesis(row[0], row[3], row[1], row[2])
