@@ -401,3 +401,53 @@ begin
 end;
 /
 
+create or replace procedure prep_examenes_est_est(eva_id evaluaciones.id%type) as
+	v_estu_id estudiantes%rowtype;
+	v_evaluador_id usuarios.id%type;
+	v_evaluado_id usuarios.id%type;
+	cursor estud_cursor is select e.id, e.codigo, e.estructura_id, e.tesis_id from estudiantes e, usuarios u where e.id=u.id and upper(u.habilitado) = 'Y';	
+begin
+	open estud_cursor;
+		loop
+			fetch estud_cursor into v_estu_id;
+			exit when estud_cursor%notfound;
+			v_evaluador_id:=v_estu_id.id;
+			v_evaluado_id:=v_estu_id.id;
+			insert into evaluacion_usuario (evaluado_id,evaluacion_id,evaluador_id) values(v_evaluado_id,eva_id,v_evaluador_id);		
+		end loop;
+	close estud_cursor;
+	commit work;
+end;
+/
+
+create or replace procedure prep_examenes_est_estruc(eva_id evaluaciones.id%type) as
+	v_estu estudiantes%rowtype;
+	v_evaluador_id usuarios.id%type;
+	v_evaluado_id usuarios.id%type;
+	cursor estud_cursor is select e.id, e.codigo, e.estructura_id, e.tesis_id from estudiantes e, usuarios u where e.id=u.id and upper(u.habilitado) = 'Y';	
+	cursor depen_estruc_cursor(estr estructuras.id%type) is select dep.id from estructuras e, estructuras dep, cargos c where e.dependencia_id=dep.id and e.director_id=c.id and upper(c.nombre) != 'DOCENTE' and e.id=estr;
+begin
+	open estud_cursor;
+		loop
+			fetch estud_cursor into v_estu;
+			exit when estud_cursor%notfound;			
+			v_evaluador_id:=v_estu.id;
+			v_evaluado_id:=v_estu.estructura_id;
+			insert into evaluacion_usuario (evaluado_id,evaluacion_id,evaluador_id) values(v_evaluado_id,eva_id,v_evaluador_id);
+			while (v_evaluado_id is not null)  
+			loop
+				open depen_estruc_cursor(v_evaluado_id);
+					fetch depen_estruc_cursor into v_evaluado_id;
+					if depen_estruc_cursor%found then
+						insert into evaluacion_usuario (evaluado_id,evaluacion_id,evaluador_id) values(v_evaluado_id,eva_id,v_evaluador_id);
+					else
+						v_evaluado_id:=null;
+					end if;
+				close depen_estruc_cursor;		
+			end loop;
+		end loop;
+	close estud_cursor;
+	commit work;
+end;
+/
+
