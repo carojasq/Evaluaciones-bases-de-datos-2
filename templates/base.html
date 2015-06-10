@@ -32,11 +32,11 @@ $def with (content)
           <ul class="nav navbar-nav">
           $if session.privilege==0:
             <li><a href="/login">Ingresar</a></li>
-          $elif session.privilege=="Estudiante":
+          $elif session.privilege[0]=="Estudiante":
             <li><a href="/evaluar/">Evaluar</a>
-          $elif session.privilege=="Administrador":
+          $elif session.privilege[0]=="Administrador":
             <li> <a href="/plantilla/listar/"> Gestion de plantillas </a> </li>
-            <li> <a href="/evaluaciones/listar/"> Gestion de evaluaciones </a> </li>
+            <li> <a href="/evaluacion/listar/"> Gestion de evaluaciones </a> </li>
           $if session.privilege!=0:
             <li> <a href="/reset"> Cerrar sesión </a> </li>
           </ul>

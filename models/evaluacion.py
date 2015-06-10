@@ -1,7 +1,7 @@
 from config import Config
-from datetime import date
+from datetime import date, datetime
 from models.plantilla import Plantilla
-
+from models.usuario import *
 #Este modelo es de otro proyecto, hay que adaptarlo para las necesidades
 class Evaluacion:
 
@@ -12,8 +12,8 @@ class Evaluacion:
     def __init__(self, identificador, periodo, fecha_inicial, fecha_final, tiempo_maximo, plantilla_id):
         self.id = identificador
         self.periodo = periodo
-        self.fecha_inicial = fecha_inicial
-        self.fecha_final = fecha_final
+        self.fecha_inicial = fecha_inicial.date()
+        self.fecha_final = fecha_final.date()
         self.tiempo_maximo = tiempo_maximo
         self.plantilla_id = plantilla_id
         self.plantilla = Plantilla.getById(plantilla_id)
@@ -37,7 +37,7 @@ class Evaluacion:
         query = "execute prep_examenes_est_prof(%s)" % self.id
         if evaluado=="Docente" and evaluador=="Estudiante":
             print query
-            cursor.execute(query)
+            cursor.callproc(prep_examenes_est_prof)
             return True;
         return False
 
@@ -61,10 +61,24 @@ class Evaluacion:
     @staticmethod
     def getAvailableForUser(usuario):
         fecha_actual = date.today()
-        #Validad que no haya sido contestada
-        #Validar que el usuario pueda hacerla
-        #Validar la fecha
-        query = "SELECT eu.evaluacion_id, eu.evaluado FROM %s eu, %s re WHERE  " % (Evaluacion.tabla_usuarios, Evaluacion.tabla_resultados)
+        #Validad que no haya sido contestada y que el usuario pueda contestarla 
+        query =  "SELECT evaluacion_id, evaluado_id, evaluador_id FROM %s WHERE evaluador_id=%s MINUS SELECT evaluacion_id, evaluado_id, evaluador_id FROM %s" % (Evaluacion.tabla_usuarios, usuario.id, Evaluacion.tabla_resultados)
+        cursor = Config.getCursor()
+        available = []
+        import ipdb; ipdb.set_trace()
+        try:
+            cursor.execute(query)
+            rows =  cursor.fetchall()
+        except Exception, e:
+            print e
+            return []
+        for row in rows:
+            evaluacion = Evaluacion.getById(row[0])
+            evaluado = Usuario.getById(row[1])
+            #Validar la fecha
+            if evaluacion.fecha_final >= fecha_actual:
+                available.append({'evaluacion': evaluacion, 'evaluado': evaluado})
+        return available
 
     @staticmethod
     def getAll():
@@ -81,4 +95,7 @@ class Evaluacion:
         return evaluaciones
 
 
-#SELECT eu.evaluacion_id, eu.evaluado FROM evaluacion_usuario eu, resultados_evaluaciones re;
+
+#insert into evaluacion_usuario(EVALUADO_ID, EVALUACION_ID, EVALUADOR_ID) values(8, 1, 6)
+#insert into evaluacion_usuario(EVALUADO_ID, EVALUACION_ID, EVALUADOR_ID) values(8, 1, 7)
+#INSERT INTO resultados_evaluaciones (ID, EVALUADOR_ID, EVALUADO_ID, FECHA, PROMEDIO, EVALUACION_ID, ESTADO) VALUES (1, 6, 8, to_date('2015/05/06', 'yyyy/mm/dd'), 5.1, 1, 'completo');

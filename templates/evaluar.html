@@ -1,0 +1,21 @@
+$def with (datos)
+
+<table class="table">
+  <tr>
+    <th> Id evaluación </th>
+    <th> Encabezado </th>
+    <th> Periodo </th>
+    <th> Fecha final </th>
+    <th> Evaluado </th>
+  </tr>
+    $for d in datos:
+       <tr>
+         <td> $d['evaluacion'].id</td>
+          <td>$d['evaluacion'].plantilla.nombre</td>
+          <td>$d['evaluacion'].periodo</td>
+          <td>$d['evaluacion'].fecha_final</td>
+          <th>$d['evaluado'].nombre </th>
+       </tr>
+    </table>
+
+</table>

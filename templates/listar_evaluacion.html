@@ -1,0 +1,20 @@
+$def with (evaluaciones)
+
+<h2> <a href="/evaluacion/crear/"> Nueva evaluacion </a> </h2>
+<table class="table">
+  <tr>
+    <th> Id evaluación </th>
+    <th> Nombre de plantilla </th>
+    <th> Periodo </th>
+    <th> Fecha final </th>
+  </tr>
+    $for e in evaluaciones:
+       <tr>
+         <td> $e.id</td>
+          <td>$e.plantilla.nombre</td>
+          <td>$e.periodo</td>
+          <td>$e.fecha_final</td>
+       </tr>
+    </table>
+
+</table>

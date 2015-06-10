@@ -1,8 +1,11 @@
 import web
 
+render = web.template.render('templates/', base="base")
+
+
 class Reset:
 	def GET(self):
-		session.login = 0
-		session.kill()
-		render = create_render(session.privilege)
-		return render.logout()
+		web.ctx.session.login = 0
+		web.ctx.session.privilege = 0
+		web.ctx.session.kill()
+		return render.index(None)

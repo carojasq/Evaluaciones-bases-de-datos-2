@@ -14,5 +14,5 @@ class IndexController:
         print web.ctx.session.privilege 
         render = web.template.render('templates/', base="base")
         print "In get"
-        usuario =  Usuario.getById(web.ctx.session.privilege)
+        usuario =  Usuario.getById(web.ctx.session.privilege[1])
         return render.index(usuario)

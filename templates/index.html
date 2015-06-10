@@ -2,7 +2,7 @@ $def with (usuario)
 
 <h1> Bienvenido  a la Evaluacion </h1>
 
-$if usuario is not None:
+$if usuario is not None and session.privilege!=0:
 	<h2> $usuario.nombre <h2>
 $else:
 	<h2> Por favor loguearse como administrador o estudiante <h2>

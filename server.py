@@ -19,6 +19,7 @@ urls = (
     '/plantilla/ver/.*', 'VerPlantilla',
     '/evaluacion/crear/.*', 'CrearEvaluacion',
     '/evaluacion/listar/.*', 'ListarEvaluacion',
+    '/evaluar/.*', 'ListarEvaluacionesUsuario', 
 )
 
 render = web.template.render('templates/', base="base")

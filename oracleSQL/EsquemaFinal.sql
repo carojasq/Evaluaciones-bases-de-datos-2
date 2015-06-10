@@ -379,7 +379,7 @@ create or replace procedure prep_examenes_est_prof(eva_id evaluaciones.id%type) 
 	v_profe_id usuarios.id%type;
 	v_grupo grupos%rowtype;
 	v_periodo evaluaciones.periodo%type;
-	cursor grupo_cursor(perio evaluaciones.periodo%type) is select gr.id, gr.asignatura_id, gr.docente_id, gr.periodo from grupos gr, funcionarios d where d.id=gr.docente_id and gr.periodo=perio;
+	cursor grupo_cursor(perio evaluaciones.periodo%type) is select gr.asignatura_id, gr.id, gr.docente_id, gr.periodo from grupos gr, funcionarios d where d.id=gr.docente_id and gr.periodo=perio;
 	cursor estud_cursor(gr_id grupos.id%type) is select e.id from estudiantes e, estudiantes_grupos eg, grupos g where e.id=eg.estudiante_id and g.id=eg.grupo_id and g.id=gr_id;	
 begin
 	select periodo into v_periodo from evaluaciones where id=eva_id;
@@ -399,7 +399,5 @@ begin
 	close grupo_cursor;
 	commit work;
 end;
-
-
 /
 
