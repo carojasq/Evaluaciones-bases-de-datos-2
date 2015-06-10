@@ -107,3 +107,10 @@ t2 = Tesis.create("Esta es otra tesis")
 e15.setTesis(t1)
 t2.setJurado(f11)
 t2.setDirector(f111)
+
+eva2 = Evaluacion.create("20151", "2015/08/05", "2015/01/01", 100, pl1 )
+eva2.asignarEvaluaciones("Estudiante", "Estructura")
+
+eva3 = Evaluacion.create("20151", "2015/08/05", "2015/01/01", 100, pl2 )
+eva3.asignarEvaluaciones("Estudiante", "Tesis")
+

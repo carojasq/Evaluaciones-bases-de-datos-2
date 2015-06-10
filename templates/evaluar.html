@@ -7,6 +7,7 @@ $def with (datos)
     <th> Periodo </th>
     <th> Fecha final </th>
     <th> Evaluado </th>
+    <th> Evaluar </th>
   </tr>
     $for d in datos:
        <tr>
@@ -15,7 +16,9 @@ $def with (datos)
           <td>$d['evaluacion'].periodo</td>
           <td>$d['evaluacion'].fecha_final</td>
           <th>$d['evaluado'].nombre </th>
+          <th><a href="?id=$d['evaluacion'].id&evaluado_id=$d['evaluado'].id"> Evaluar </a>
        </tr>
     </table>
 
 </table>
+

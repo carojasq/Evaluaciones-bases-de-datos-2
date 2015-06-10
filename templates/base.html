@@ -30,15 +30,16 @@ $def with (content)
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-          $if session.privilege==0:
+          $if session.login==0:
             <li><a href="/login">Ingresar</a></li>
-          $elif session.privilege[0]=="Estudiante":
-            <li><a href="/evaluar/">Evaluar</a>
-          $elif session.privilege[0]=="Administrador":
-            <li> <a href="/plantilla/listar/"> Gestion de plantillas </a> </li>
-            <li> <a href="/evaluacion/listar/"> Gestion de evaluaciones </a> </li>
-          $if session.privilege!=0:
-            <li> <a href="/reset"> Cerrar sesión </a> </li>
+          $elif session.login==1:
+            $if session.privilege[0]=="Estudiante":
+              <li><a href="/evaluar/">Evaluar</a>
+            $elif session.privilege[0]=="Administrador":
+              <li> <a href="/plantilla/listar/"> Gestion de plantillas </a> </li>
+              <li> <a href="/evaluacion/listar/"> Gestion de evaluaciones </a> </li>
+            $if session.privilege!=0:
+              <li> <a href="/reset"> Cerrar sesión </a> </li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>

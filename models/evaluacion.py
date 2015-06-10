@@ -46,7 +46,7 @@ class Evaluacion:
         elif evaluado =="Estructura"  and evaluador=="Estudiante":
             cursor.callproc("prep_examenes_est_estruc", [self.id])
             return True
-        elif evaluado =="Director/Jurado - Tesis"  and evaluador=="Estudiante":
+        elif evaluado =="Tesis"  and evaluador=="Estudiante":
             cursor.callproc("prep_examenes_est_direc", [self.id])
             return True
         return False
@@ -75,7 +75,6 @@ class Evaluacion:
         query =  "SELECT evaluacion_id, evaluado_id, evaluador_id FROM %s WHERE evaluador_id=%s MINUS SELECT evaluacion_id, evaluado_id, evaluador_id FROM %s" % (Evaluacion.tabla_usuarios, usuario.id, Evaluacion.tabla_resultados)
         cursor = Config.getCursor()
         available = []
-        import ipdb; ipdb.set_trace()
         try:
             cursor.execute(query)
             rows =  cursor.fetchall()
@@ -86,7 +85,7 @@ class Evaluacion:
             evaluacion = Evaluacion.getById(row[0])
             evaluado = Usuario.getById(row[1])
             #Validar la fecha
-            if evaluacion.fecha_final >= fecha_actual:
+            if evaluacion.fecha_final.date() >= fecha_actual:
                 available.append({'evaluacion': evaluacion, 'evaluado': evaluado})
         return available
 
@@ -103,6 +102,47 @@ class Evaluacion:
         for row in rows:
             evaluaciones.append(Evaluacion(row[0], row[1], row[3], row[2], row[4], row[5]))
         return evaluaciones
+
+class Resultado:
+
+    tabla = "resultados_evaluaciones"
+    tabla_preguntas =  "resultados_preguntas"
+
+
+    def __init__(self, id, evaluador_id, evaluado_id, fecha, promedio, estado="Completo", preguntas=[]):
+        self.id = id
+        self.evaluado = Usuario.getById(evaluado_id)
+        self.evaluador = Usuario.getById(evaluador_id)
+        self.fecha = fecha
+        self.promedio = promedio
+        self.estado = estado
+        self.resultados = preguntas
+    
+    @staticmethod
+    def create(evaluacion_id, evaluado_id, evaluador_id, preguntas, estado="Completo", fecha=date.today()):
+        # Preguntas, arreglo parejas ordenadas (id_pregunta, calificacion)
+        calificaciones = [float(p[0]) for p in preguntas]
+        promedio =  sum(calificaciones) / len(calificaciones)
+        query = "INSERT INTO %s (id, evaluador_id, evaluado_id, fecha, promedio, evaluacion_id, estado) values (sequence_resultados.nextval, %s, %s, to_date('%s', 'yyyy/mm/dd'), %s, %s, '%s')" % (Resultado.tabla, evaluador_id, evaluado_id, fecha.strftime('%Y/%m/%d'), str(promedio), str(evaluacion_id), str(estado))
+        try:
+            cursor  = Config.getCursor()
+            cursor.execute(query)
+        except Exception, e:
+            return None
+        try:
+            cursor.execute("SELECT sequence_resultados.currval FROM DUAL")
+            row  = cursor.fetchone()
+        except Exception, e:
+            return None
+        id_resultado = row[0]
+        for p in preguntas:
+            query = "INSERT INTO %s (pregunta_id, resultado_id,  nota) values (%s, %s, %s)"   % (Resultado.tabla_preguntas, str(p[1]), str(id_resultado), str(p[0]))
+            try:
+                cursor.execute(query)
+            except Exception, e:
+                return None
+
+        return Resultado(row[0], evaluador_id, evaluado_id, fecha, promedio, estado, preguntas)
 
 
 

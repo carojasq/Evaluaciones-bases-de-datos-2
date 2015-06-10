@@ -351,6 +351,21 @@ ALTER TABLE estructuras ADD CONSTRAINT FK_estructuras_usuarios
 
 ALTER TABLE evaluaciones ADD CONSTRAINT FK_evaluaciones_plantil FOREIGN KEY (plantilla_id) REFERENCES plantillas (id) ;
 
+DROP TABLE resultados_preguntas CASCADE CONSTRAINTS
+;
+CREATE TABLE resultados_preguntas
+(
+	resultado_id  NUMBER(8) NOT NULL,
+	pregunta_id   NUMBER(4) NOT NULL,
+	nota          NUMBER(2) NOT NULL
+)
+;
+
+
+ALTER TABLE resultados_preguntas ADD CONSTRAINT FK_resultados_pr_resultados_ev 
+	FOREIGN KEY (resultado_id) REFERENCES resultados_evaluaciones (id)
+;
+
 
 
 DROP SEQUENCE sequence_cargos;
@@ -520,3 +535,5 @@ begin
 	commit work;
 end;
 /
+
+

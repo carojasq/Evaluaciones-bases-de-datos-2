@@ -1,5 +1,5 @@
 from models.usuario import Usuario
-from models.evaluacion import Evaluacion
+from models.evaluacion import *
 from models.plantilla import Plantilla
 #from models.administrador import Administrador
 import web
@@ -12,7 +12,7 @@ render = web.template.render('templates/', base="base")
 class CrearEvaluacion:
 
     def GET(self):
-    	datos = web.input()
+        datos = web.input()
         plantillas_disponibles = Plantilla.getAll()
         #datos['ciudades'] = Ciudad.getAll()
         return render.crear_evaluacion(plantillas_disponibles) 
@@ -62,5 +62,32 @@ class ListarEvaluacion:
 
 class ListarEvaluacionesUsuario:
     def GET(self):
-        datos = Evaluacion.getAvailableForUser(Usuario.getById(web.ctx.session.privilege[1]))
-        return render.evaluar(datos)
+        datos = web.input()
+        try:
+            id_evaluacion = datos['id']
+            id_evaluado = datos['evaluado_id']
+            #import ipdb; ipdb.set_trace()
+            evaluacion = Evaluacion.getById(id_evaluacion)
+            evaluado = Usuario.getById(id_evaluado)
+            return render.evaluar_concreto(evaluacion, evaluado)
+        except:
+            evaluaciones = Evaluacion.getAvailableForUser(Usuario.getById(web.ctx.session.privilege[1]))
+            return render.evaluar(evaluaciones)
+
+    def POST(self):
+        datos = web.input()
+        id_evaluacion = datos['evaluacion_id']
+        id_evaluado = datos['evaluado_id']
+        ev =  Evaluacion.getById(id_evaluacion)
+        prs = ev.plantilla.preguntas
+        i = 1
+        res  = []
+        for p in prs:
+            res.append((datos["resultados%s" % str(p.id)], p.id))
+        id_evaluador =  web.ctx.session.privilege[1]
+        resultado  = Resultado.create(id_evaluacion, id_evaluado, id_evaluador, res )
+        evaluaciones = Evaluacion.getAvailableForUser(Usuario.getById(web.ctx.session.privilege[1]))
+        return render.evaluar(evaluaciones)
+
+
+
