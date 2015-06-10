@@ -34,7 +34,6 @@ class Evaluacion:
 
     def asignarEvaluaciones(self, evaluador, evaluado):
         cursor = Config.getCursor()
-        import ipdb; ipdb.set_trace()
         if evaluado=="Docente" and evaluador=="Estudiante":
             cursor.callproc("prep_examenes_est_prof", [self.id])
             return True;
