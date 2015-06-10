@@ -537,3 +537,14 @@ end;
 /
 
 
+CREATE OR REPLACE trigger tri_plantilla
+  AFTER INSERT ON resultados_evaluaciones
+  FOR EACH ROW
+DECLARE
+  id_evaluacion evaluaciones.id%type;
+  id_plantilla plantillas.id%type;
+BEGIN
+	SELECT plantilla_id INTO id_plantilla FROM evaluaciones WHERE  id=:new.evaluacion_id;
+	UPDATE plantillas SET modificable='N' WHERE id=id_plantilla;
+END tri_plantilla; 
+/
