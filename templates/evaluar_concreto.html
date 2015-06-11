@@ -1,0 +1,54 @@
+$def with (evaluacion,evaluado)
+
+<h1> $evaluacion.plantilla.nombre </h1>
+<table class="table">
+  <tr>
+    <th> Periodo </th> <th> Evaluado </th> 
+  </tr>
+  <tr>
+    <td>$evaluacion.periodo</td> 
+    <td>$evaluado.nombre</td>
+  </tr>
+</table>
+
+<table class="table">
+  <tr>
+    <th> Fecha inicial </th>
+    <th> Fecha final </th>
+  </tr>
+  <tr>
+    <td>$evaluacion.fecha_inicial</td>
+    <td>$evaluacion.fecha_final</td>
+  </tr>
+</table>
+<table class="table">
+  <tr>
+    <th> Tiempo maximo de inactividad</th>
+  </tr>
+  <tr>
+    <td>$evaluacion.tiempo_maximo</td>
+  </tr>
+</table>
+
+<form method="POST">
+  <h1> Detalle </h1>
+  <input type="hidden" name="evaluacion_id" value="$evaluacion.id">
+  <input type="hidden" name="evaluado_id" value="$evaluado.id">
+  <table class="table">
+    <tr>
+      <th> Pregunta </th>
+      <th> Respuesta </th>
+    </tr>
+    $for p in evaluacion.plantilla.preguntas:
+         <tr>
+             <td>$p.pregunta</td>
+             <td> <input type="radio" name="resultados$p.id" value="1"> 1
+                <input type="radio" name="resultados$p.id" value="2"> 2
+                <input type="radio" name="resultados$p.id" value="3" checked="checked"> 3
+                <input type="radio" name="resultados$p.id" value="4"> 4
+                <input type="radio" name="resultados$p.id" value="5"> 5
+             </td>  
+         </tr>      
+  </table>
+  <button type="submit" class="btn btn-default">Enviar Respuestas</button>
+</form>
